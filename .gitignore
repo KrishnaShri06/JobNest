@@ -1,0 +1,32 @@
+# Compiled class files
+build/
+bin/
+*.class
+
+# Package Files
+dist/
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Database Drivers (Manual downloads)
+web/WEB-INF/lib/mysql-connector-*.jar
+build/WEB-INF/lib/mysql-connector-*.jar
+
+# IDE files
+.settings/
+.project
+.classpath
+.idea/
+*.iml
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
