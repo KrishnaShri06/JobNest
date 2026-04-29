@@ -1,0 +1,76 @@
+def print_matrix(mat) :
+    for i in mat:
+       print(i)
+    print()
+
+def find_blank(mat):
+    for i in range(4):
+        for j in range(4):
+            if mat[i][j] == 0:
+                return i,j
+                
+            
+
+def misplaced(curr,goal):
+    g=0
+    for i in range(4):
+        for j in range(4):
+            if curr[i][j]!=0 and curr[i][j] != goal[i][j]:
+                g+=1
+    return g
+    
+def copy_matrix(mat):
+    return [row[:] for row in mat]
+    
+def puzzle(initial,goal):
+    current = initial
+    parent = None
+    level = 0
+    while True:
+        g = misplaced(current,goal)
+        c = level + g
+        print("f(x)=",level," g(x)=",g," c(x)=",c)
+        print_matrix(current)
+        if g == 0:
+            print("Goal reached")
+            break
+        child = []
+        x,y = find_blank(current)
+        steps = [(-1,0),(1,0),(0,-1),(0,1)]
+        for dx,dy in steps:
+         nx,ny = x+dx,y+dy
+         if 0<= nx < 4 and 0<= ny < 4:
+                
+            new_state = copy_matrix(current)
+            new_state[x][y],new_state[nx][ny] = new_state[nx][ny],new_state[x][y]
+            if parent != None and parent == new_state:
+                continue
+            new_g = misplaced(new_state,goal)
+            new_c = level+1+new_g
+            child.append((new_c,new_state))
+        if not child :
+            print("No result")
+            break
+        
+        child.sort(key=lambda x:x[0])
+        new_arr = child[0][1]
+        parent = current
+        current = new_arr
+        level+=1
+        
+initial = [
+    [1,2,3,4],
+    [5,6,7,8],
+    [9,10,11,12],
+    [13,14,0,15]
+]
+
+goal = [
+    [1,2,3,4],
+    [5,6,7,8],
+    [9,10,11,12],
+    [13,14,15,0]
+]
+
+puzzle(initial, goal)
+    
