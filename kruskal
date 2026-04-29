@@ -1,0 +1,63 @@
+# Find parent of a node (with path compression)
+def find(parent, node):
+    if parent[node] != node:
+        parent[node] = find(parent, parent[node])  # compress path
+    return parent[node]
+
+
+# Union of two sets
+def union(parent, rank, u, v):
+    root_u = find(parent, u)
+    root_v = find(parent, v)
+
+    # Attach smaller tree under bigger tree (union by rank)
+    if rank[root_u] < rank[root_v]:
+        parent[root_u] = root_v
+    elif rank[root_u] > rank[root_v]:
+        parent[root_v] = root_u
+    else:
+        parent[root_v] = root_u
+        rank[root_u] += 1
+
+
+def kruskal(edges, nodes):
+    # Step 1: Sort edges based on weight
+    edges.sort(key=lambda x: x[2])
+
+    # Step 2: Initialize parent and rank
+    parent = {}
+    rank = {}
+
+    for node in nodes:
+        parent[node] = node   # initially, each node is its own parent
+        rank[node] = 0        # rank (tree height)
+
+    mst = []   # store result
+
+    # Step 3: Process edges
+    for u, v, weight in edges:
+        # Check if u and v are in different sets
+        if find(parent, u) != find(parent, v):
+            mst.append((u, v, weight))   # include edge in MST
+            union(parent, rank, u, v)    # merge sets
+
+    return mst
+
+
+# Example graph
+nodes = ['A', 'B', 'C', 'D']
+
+edges = [
+    ('A', 'B', 1),
+    ('A', 'C', 3),
+    ('B', 'C', 2),
+    ('B', 'D', 4),
+    ('C', 'D', 5)
+]
+
+# Run algorithm
+mst = kruskal(edges, nodes)
+
+print("Minimum Spanning Tree:")
+for edge in mst:
+    print(edge)
